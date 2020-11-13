@@ -14,3 +14,6 @@ type Value struct {
 func (v *Value) Val() interface{} {
 	return v.val
 }
+func (v *Value) ExpireAt(at time.Time) {
+	v.expireAt = &at
+}
