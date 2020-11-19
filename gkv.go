@@ -60,12 +60,14 @@ func (g *Gkv) getWithoutLock(key string) *Value {
 	return nil
 }
 
-func (g *Gkv) GetOrCreate(key string) (v *Value) {
+func (g *Gkv) GetOrCreate(key string, val interface{}) (v *Value) {
 	g.containerMu.Lock()
 	defer g.containerMu.Unlock()
 
 	if v = g.getWithoutLock(key); v == nil {
-		v = &Value{}
+		v = &Value{
+			val: val,
+		}
 		g.container[key] = v
 	}
 	return
