@@ -70,6 +70,19 @@ func (g *Gkv) GetOrCreate(key string) (v *Value) {
 	}
 	return
 }
+func (g *Gkv) GetCopy() (v map[string]interface{}) {
+	g.containerMu.RLock()
+	defer g.containerMu.RUnlock()
+	v = map[string]interface{}{}
+	now := time.Now()
+
+	for k, val := range g.container {
+		if !val.isExpired(&now) {
+			v[k] = val.val
+		}
+	}
+	return
+}
 
 func (g *Gkv) Del(key string) {
 	g.containerMu.Lock()
