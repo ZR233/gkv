@@ -33,7 +33,7 @@ func TestValue_isExpired(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			v := &Value{
-				val:      tt.fields.val,
+				Val:      tt.fields.val,
 				expireAt: tt.fields.expireAt,
 				RWMutex:  tt.fields.RWMutex,
 			}

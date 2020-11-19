@@ -55,8 +55,8 @@ func TestGkv_Get(t *testing.T) {
 				}
 				v := c.Get(fmt.Sprintf("%d", k))
 				v.Lock()
-				v.val = time.Now()
-				v.val = k + 1
+				v.Val = time.Now()
+				v.Val = k + 1
 				v.Unlock()
 
 				newI := atomic.AddUint32(&iter, 1)
@@ -74,12 +74,12 @@ func TestGkv_Get(t *testing.T) {
 	}
 	for i := 1; i < 5; i++ {
 		want := i + 1
-		if v := c.Get(fmt.Sprintf("%d", i)).val; v != want {
-			t.Errorf("val(%d) not %d", v, want)
+		if v := c.Get(fmt.Sprintf("%d", i)).Val; v != want {
+			t.Errorf("Val(%d) not %d", v, want)
 		}
 	}
 
-	if v := c.Get("6").val; v != 3333 {
+	if v := c.Get("6").Val; v != 3333 {
 		t.Errorf("6 not 3333 :%d", v)
 	}
 }
@@ -94,11 +94,11 @@ func TestGkv_GetOrCreate(t *testing.T) {
 	for i := 0; i < gr; i++ {
 		go func(i int) {
 			f := func() {
-				v := c.GetOrCreate(key)
+				v := c.GetOrCreate(key, nil)
 				v.Lock()
 				defer v.Unlock()
-				v.val = i
-				v.val = 1
+				v.Val = i
+				v.Val = 1
 			}
 			for {
 				f()
@@ -113,7 +113,7 @@ func TestGkv_GetOrCreate(t *testing.T) {
 		t.Errorf("len (%d)not (%d)", c.Len(), wantLen)
 	}
 
-	if v := c.Get("1").val; v != 1 {
+	if v := c.Get("1").Val; v != 1 {
 		t.Errorf("1 not 1 :%d", v)
 	}
 }

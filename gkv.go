@@ -35,7 +35,7 @@ func (g *Gkv) Set(key string, value interface{}, expireAt *time.Time) {
 	defer g.containerMu.Unlock()
 	v := &Value{}
 	v.expireAt = expireAt
-	v.val = value
+	v.Val = value
 	g.container[key] = v
 }
 func (g *Gkv) Get(key string) *Value {
@@ -66,7 +66,7 @@ func (g *Gkv) GetOrCreate(key string, val interface{}) (v *Value) {
 
 	if v = g.getWithoutLock(key); v == nil {
 		v = &Value{
-			val: val,
+			Val: val,
 		}
 		g.container[key] = v
 	}
@@ -80,7 +80,7 @@ func (g *Gkv) GetCopy() (v map[string]interface{}) {
 
 	for k, val := range g.container {
 		if !val.isExpired(&now) {
-			v[k] = val.val
+			v[k] = val.Val
 		}
 	}
 	return
