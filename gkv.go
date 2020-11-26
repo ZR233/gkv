@@ -60,7 +60,7 @@ func (g *Gkv) getWithoutLock(key string) *Value {
 	return nil
 }
 
-func (g *Gkv) GetOrCreate(key string, val interface{}) (v *Value) {
+func (g *Gkv) GetOrCreate(key string, val interface{}, expireAt *time.Time) (v *Value) {
 	g.containerMu.Lock()
 	defer g.containerMu.Unlock()
 
@@ -68,6 +68,7 @@ func (g *Gkv) GetOrCreate(key string, val interface{}) (v *Value) {
 		v = &Value{
 			Val: val,
 		}
+		v.expireAt = expireAt
 		g.container[key] = v
 	}
 	return
