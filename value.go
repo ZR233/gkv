@@ -14,6 +14,14 @@ type Value struct {
 func (v *Value) ExpireAt(at time.Time) {
 	v.expireAt = &at
 }
+func (v *Value) GetExpireAt() *time.Time {
+	ex := time.Time{}
+	if v.expireAt != nil {
+		ex = *v.expireAt
+		return &ex
+	}
+	return nil
+}
 
 func (v *Value) isExpired(now *time.Time) bool {
 	if v.expireAt != nil {
